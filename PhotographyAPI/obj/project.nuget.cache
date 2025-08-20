@@ -1,0 +1,16 @@
+{
+  "version": 2,
+  "dgSpecHash": "Ezg3Jz04kdI=",
+  "success": true,
+  "projectFilePath": "C:\\Users\\micah\\OneDrive\\Coding\\Website\\Photograpgy\\Photography\\PhotographyAPI\\PhotographyAPI.csproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\micah\\.nuget\\packages\\amazon.lambda.core\\2.7.0\\amazon.lambda.core.2.7.0.nupkg.sha512",
+    "C:\\Users\\micah\\.nuget\\packages\\amazon.lambda.serialization.systemtextjson\\2.4.4\\amazon.lambda.serialization.systemtextjson.2.4.4.nupkg.sha512",
+    "C:\\Users\\micah\\.nuget\\packages\\awssdk.core\\4.0.0.21\\awssdk.core.4.0.0.21.nupkg.sha512",
+    "C:\\Users\\micah\\.nuget\\packages\\awssdk.s3\\4.0.6.4\\awssdk.s3.4.0.6.4.nupkg.sha512",
+    "C:\\Users\\micah\\.nuget\\packages\\microsoft.netcore.app.runtime.linux-x64\\8.0.13\\microsoft.netcore.app.runtime.linux-x64.8.0.13.nupkg.sha512",
+    "C:\\Users\\micah\\.nuget\\packages\\microsoft.aspnetcore.app.runtime.linux-x64\\8.0.13\\microsoft.aspnetcore.app.runtime.linux-x64.8.0.13.nupkg.sha512",
+    "C:\\Users\\micah\\.nuget\\packages\\microsoft.netcore.app.crossgen2.win-x64\\8.0.13\\microsoft.netcore.app.crossgen2.win-x64.8.0.13.nupkg.sha512"
+  ],
+  "logs": []
+}
