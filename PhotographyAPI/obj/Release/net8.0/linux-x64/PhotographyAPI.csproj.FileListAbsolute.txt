@@ -17,3 +17,4 @@ C:\Users\micah\OneDrive\Coding\Website\Photograpgy\Photography\PhotographyAPI\ob
 C:\Users\micah\OneDrive\Coding\Website\Photograpgy\Photography\PhotographyAPI\obj\Release\net8.0\linux-x64\PhotographyAPI.pdb
 C:\Users\micah\OneDrive\Coding\Website\Photograpgy\Photography\PhotographyAPI\obj\Release\net8.0\linux-x64\PhotographyAPI.genruntimeconfig.cache
 C:\Users\micah\OneDrive\Coding\Website\Photograpgy\Photography\PhotographyAPI\obj\Release\net8.0\linux-x64\ref\PhotographyAPI.dll
+C:\Users\micah\OneDrive\Coding\Website\Photograpgy\Photography\PhotographyAPI\obj\Release\net8.0\linux-x64\PhotographyAPI.sourcelink.json

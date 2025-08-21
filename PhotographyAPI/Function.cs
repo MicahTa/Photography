@@ -14,44 +14,46 @@ public class Function
     // Load Diffrent Important API Classes
     S3Controller S3 = new S3Controller();
     // Handle API Call
-    public async Task<string> FunctionHandler(JsonElement input, ILambdaContext context)
+    public async Task<JsonElement> FunctionHandler(JsonElement input, ILambdaContext context)
     {
         try
         {
-            var request = JsonSerializer.Deserialize<Base>(input);
-            string message;
+            var request = JsonSerializer.Deserialize<Request.Base>(input);
+            string JsonElement;
+            JsonElement message;
 
             // Make Sure Theres a Action
             if (!Request.Test(request.Action))
             {
-                return "Invalid Arguments";
+                return Response.Error("Invalid Arguments");
             }
-
             switch (request.Action.ToLower())
             {
                 case "writetxtfile":
-                    var data_WriteTxtFile = JsonSerializer.Deserialize<WriteTxtFile>(input);
-                    message = await S3.WriteTxtFile(new WriteTxtFile(data_WriteTxtFile.KeyName, data_WriteTxtFile.FileContent));
+                    var data_WriteTxtFile = JsonSerializer.Deserialize<Request.WriteTxtFile>(input);
+                    message = await S3.WriteTxtFile(new Request.WriteTxtFile(data_WriteTxtFile.KeyName, data_WriteTxtFile.FileContent));
                     return message;
 
                 case "createfolder":
-                    var data_CreateFolder = JsonSerializer.Deserialize<CreateFolder>(input);
-                    message = await S3.CreateFolder(new CreateFolder(data_CreateFolder.FolderKey));
-                    return message;
+                    //var data_CreateFolder = JsonSerializer.Deserialize<Request.CreateFolder>(input);
+                    return Response.Error("Non Implimentation Error");
+                    //message = await S3.CreateFolder(new Request.CreateFolder(data_CreateFolder.FolderKey));
+                //return message;
 
                 case "delete":
-                    var data_Delete = JsonSerializer.Deserialize<Delete>(input);
-                    message = await S3.Delete(new Delete(data_Delete.KeyOrPrefix));
-                    return message;
+                    //var data_Delete = JsonSerializer.Deserialize<Request.Delete>(input);
+                    return Response.Error("Non Implimentation Error");
+                    //message = await S3.Delete(new Request.Delete(data_Delete.KeyOrPrefix));
+                //return message;
 
                 default:
-                    Console.WriteLine($"Unknown action: {request.Action}");
-                    return $"Method \"{request.Action}\" does not exist";
+                    return Response.Error($"Unknown action: {request.Action}");
+                    //return $"Method \"{request.Action}\" does not exist";
             }
         }
         catch (Exception ex)
         {
-            return ($"Error handling request: {ex.Message}");
+            return Response.Error($"Error handling request: {ex.Message}");
         }
     }
 }

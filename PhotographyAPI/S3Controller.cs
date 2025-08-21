@@ -26,10 +26,10 @@ namespace PhotographyAPI
         }
 
 
-        public async Task<string> WriteTxtFile(WriteTxtFile data)
+        public async Task<JsonElement> WriteTxtFile(Request.WriteTxtFile data)
         {
             if (!Request.Test(data.KeyName, data.FileContent)) {
-                return "Invalid Arguments";
+                return Response.Error("Invalid Arguments");
             }
 
             using var stream = new MemoryStream(Encoding.UTF8.GetBytes(data.FileContent));
@@ -43,12 +43,13 @@ namespace PhotographyAPI
             };
 
             await s3Client.PutObjectAsync(putRequest);
-
-            return $"File uploaded to s3://{bucketName}/{data.KeyName}";
+            Response.WriteTxtFile response = new Response.WriteTxtFile($"File uploaded to s3://{bucketName}/{data.KeyName}");
+            return response.Respond();
+            // $"File uploaded to s3://{bucketName}/{data.KeyName}";
         }
 
 
-        public async Task<string> CreateFolder(CreateFolder data)
+        /*public async Task<string> CreateFolder(CreateFolder data)
         {
             if (!Request.Test(data.FolderKey)) {
                 return "Invalid Arguments";
@@ -116,7 +117,7 @@ namespace PhotographyAPI
 
             var deleteResponse = await s3Client.DeleteObjectsAsync(deleteRequest);
             return ($"Deleted {deleteResponse.DeletedObjects.Count} object(s) from '{data.KeyOrPrefix}'");
-        }
+        }*/
 
 
     }
