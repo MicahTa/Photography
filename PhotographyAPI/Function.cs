@@ -35,20 +35,17 @@ public class Function
                     return message;
 
                 case "createfolder":
-                    //var data_CreateFolder = JsonSerializer.Deserialize<Request.CreateFolder>(input);
-                    return Response.Error("Non Implimentation Error");
-                    //message = await S3.CreateFolder(new Request.CreateFolder(data_CreateFolder.FolderKey));
-                //return message;
+                    var data_CreateFolder = JsonSerializer.Deserialize<Request.CreateFolder>(input);
+                    message = await S3.CreateFolder(new Request.CreateFolder(data_CreateFolder.FolderKey));
+                    return message;
 
                 case "delete":
-                    //var data_Delete = JsonSerializer.Deserialize<Request.Delete>(input);
-                    return Response.Error("Non Implimentation Error");
-                    //message = await S3.Delete(new Request.Delete(data_Delete.KeyOrPrefix));
-                //return message;
+                    var data_Delete = JsonSerializer.Deserialize<Request.Delete>(input);
+                    message = await S3.Delete(new Request.Delete(data_Delete.KeyOrPrefix));
+                    return message;
 
                 default:
                     return Response.Error($"Unknown action: {request.Action}");
-                    //return $"Method \"{request.Action}\" does not exist";
             }
         }
         catch (Exception ex)

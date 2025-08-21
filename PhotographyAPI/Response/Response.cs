@@ -15,22 +15,21 @@ public class Response
         using var doc = JsonDocument.Parse(jsonString);
         return doc.RootElement.Clone();
     }
-    public class WriteTxtFile : IResponse
+    public class WriteTxtFile : DefultResponse
     {
-        [JsonPropertyName("successful")]
-        public bool Successful { get; set; } = false;
-        [JsonPropertyName("message")]
-        public string Message { get; set; }
-        public WriteTxtFile(string message)
-        {
-            Successful = true;
-            Message = message;
-        }
-        public JsonElement Respond() {
-            var response = this;
-            string jsonString = JsonSerializer.Serialize(response);
-            using var doc = JsonDocument.Parse(jsonString);
-            return doc.RootElement.Clone();
-        }
+        public WriteTxtFile(string message) : base(message) { }
+        public WriteTxtFile() : base() { }
+    }
+
+    public class CreateFolder : DefultResponse
+    {
+        public CreateFolder(string message) : base(message) { }
+        public CreateFolder() : base() { }
+    }
+
+    public class Delete : DefultResponse
+    {
+        public Delete(string message) : base(message) { }
+        public Delete() : base() { }
     }
 }

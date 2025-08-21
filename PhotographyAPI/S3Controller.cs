@@ -9,6 +9,7 @@ using Amazon.Util.Internal;
 using Microsoft.VisualBasic;
 using System.Text.Json;
 using System.Runtime.CompilerServices;
+using System.Net.Http.Headers;
 
 
 namespace PhotographyAPI
@@ -31,6 +32,7 @@ namespace PhotographyAPI
             if (!Request.Test(data.KeyName, data.FileContent)) {
                 return Response.Error("Invalid Arguments");
             }
+            Response.WriteTxtFile response = new Response.WriteTxtFile($"File uploaded to s3://{bucketName}/{data.KeyName}");
 
             using var stream = new MemoryStream(Encoding.UTF8.GetBytes(data.FileContent));
 
@@ -43,17 +45,16 @@ namespace PhotographyAPI
             };
 
             await s3Client.PutObjectAsync(putRequest);
-            Response.WriteTxtFile response = new Response.WriteTxtFile($"File uploaded to s3://{bucketName}/{data.KeyName}");
             return response.Respond();
-            // $"File uploaded to s3://{bucketName}/{data.KeyName}";
         }
 
 
-        /*public async Task<string> CreateFolder(CreateFolder data)
+        public async Task<JsonElement> CreateFolder(Request.CreateFolder data)
         {
             if (!Request.Test(data.FolderKey)) {
-                return "Invalid Arguments";
+                return Response.Error("Invalid Arguments");
             }
+            Response.CreateFolder response = new Response.CreateFolder($"Folder s3://{bucketName}/{data.FolderKey} created");
 
             // Ensure folderKey ends with "/"
             if (!data.FolderKey.EndsWith("/"))
@@ -68,16 +69,16 @@ namespace PhotographyAPI
 
             await s3Client.PutObjectAsync(request);
 
-            return $"Folder s3://{bucketName}/{data.FolderKey} created";
+            return response.Respond();
         }
 
 
 
-        public async Task<string> Delete(Delete data) {
+        public async Task<JsonElement> Delete(Request.Delete data) {
             if (!Request.Test(data.KeyOrPrefix)) {
-                return "Invalid Arguments";
+                return Response.Error("Invalid Arguments");
             }
-
+            Response.Delete response = new Response.Delete();
 
             var keysToDelete = new List<KeyVersion>();
 
@@ -93,7 +94,7 @@ namespace PhotographyAPI
                 listResponse = await s3Client.ListObjectsV2Async(listRequest);
 
                 if (listResponse.S3Objects is null) {
-                    return ($"No objects found with key/prefix '{data.KeyOrPrefix}'");
+                    return Response.Error($"No objects found with key/prefix '{data.KeyOrPrefix}'");
                 }
 
                 foreach (var obj in listResponse.S3Objects)
@@ -105,7 +106,7 @@ namespace PhotographyAPI
             } while ((bool)listResponse.IsTruncated);
 
             if (keysToDelete.Count == 0) {
-                return ($"No objects found with key/prefix '{data.KeyOrPrefix}'");
+                return Response.Error($"No objects found with key/prefix '{data.KeyOrPrefix}'");
             }
 
             // Delete in batches (S3 supports up to 1000 per request)
@@ -116,8 +117,9 @@ namespace PhotographyAPI
             };
 
             var deleteResponse = await s3Client.DeleteObjectsAsync(deleteRequest);
-            return ($"Deleted {deleteResponse.DeletedObjects.Count} object(s) from '{data.KeyOrPrefix}'");
-        }*/
+            response.SetMessage($"Deleted {deleteResponse.DeletedObjects.Count} object(s) from '{data.KeyOrPrefix}'");
+            return response.Respond();
+        }
 
 
     }
