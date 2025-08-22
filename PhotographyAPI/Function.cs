@@ -43,6 +43,16 @@ public class Function
                     var data_Delete = JsonSerializer.Deserialize<Request.Delete>(input);
                     message = await S3.Delete(new Request.Delete(data_Delete.KeyOrPrefix));
                     return message;
+                
+                case "readfile":
+                    var data_ReadFile = JsonSerializer.Deserialize<Request.ReadFile>(input);
+                    message = await S3.ReadFile(new Request.ReadFile(data_ReadFile.FileKey));
+                    return message;
+                
+                case "readjson":
+                    var data_ReadJson = JsonSerializer.Deserialize<Request.ReadJson>(input);
+                    message = await S3.ReadJson(new Request.ReadJson(data_ReadJson.FileKey));
+                    return message;
 
                 default:
                     return Response.Error($"Unknown action: {request.Action}");
@@ -54,11 +64,3 @@ public class Function
         }
     }
 }
-
-
-/* 
-{
-action = ""
-Data = {}
-}
-*/

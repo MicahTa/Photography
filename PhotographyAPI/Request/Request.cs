@@ -5,7 +5,8 @@ namespace PhotographyAPI;
 
 public class Request
 {
-    static public bool Test(params string[] args) {
+    static public bool Test(params string[] args)
+    {
         foreach (string arg in args)
         {
             if (arg == null || string.IsNullOrEmpty(arg))
@@ -53,20 +54,53 @@ public class Request
             KeyOrPrefix = keyOrPrefix;
         }
     }
-    
 
-    public class CreateFolder : IRequest {
+
+    public class CreateFolder : IRequest
+    {
         [JsonPropertyName("action")]
         public string Action { get; set; }
 
         [JsonPropertyName("folderKey")]
         public string FolderKey { get; set; }
 
-        
+
         public CreateFolder(string folderKey)
         {
             Action = "CreateFolder";
             FolderKey = folderKey;
+        }
+    }
+
+
+
+    public class ReadFile : IRequest
+    {
+        [JsonPropertyName("action")]
+        public string Action { get; set; }
+
+        [JsonPropertyName("fileKey")]
+        public string FileKey { get; set; }
+
+        public ReadFile(string fileKey)
+        {
+            Action = "ReadFile";
+            FileKey = fileKey;
+        }
+    }
+    
+
+        public class ReadJson : IRequest {
+        [JsonPropertyName("action")]
+        public string Action { get; set; }
+
+        [JsonPropertyName("fileKey")]
+        public string FileKey { get; set; }
+
+        public ReadJson(string fileKey)
+        {
+            Action = "ReadFile";
+            FileKey = fileKey;
         }
     }
 }

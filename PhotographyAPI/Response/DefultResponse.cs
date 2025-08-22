@@ -25,6 +25,13 @@ public class DefultResponse
         using var doc = JsonDocument.Parse(jsonString);
         return doc.RootElement.Clone();
     }
+    /*public JsonElement Respond(object jsonKey)
+    {
+        var response = jsonKey;
+        string jsonString = JsonSerializer.Serialize(response);
+        using var doc = JsonDocument.Parse(jsonString);
+        return doc.RootElement.Clone();
+    }*/
     public void SetMessage(string message)
     {
         Message = message;

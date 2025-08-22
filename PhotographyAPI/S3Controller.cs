@@ -12,6 +12,7 @@ using System.Runtime.CompilerServices;
 using System.Net.Http.Headers;
 
 
+
 namespace PhotographyAPI
 {
     public class S3Controller
@@ -48,10 +49,61 @@ namespace PhotographyAPI
             return response.Respond();
         }
 
+        public async Task<JsonElement> ReadFile(Request.ReadFile data)
+        {
+            if (!Request.Test(data.FileKey)) {
+                return Response.Error("Invalid Arguments");
+            }
+            Response.ReadFile response = new Response.ReadFile($"Succsesfully read file contents of {data.FileKey}");
+        try
+            {
+                var request = new GetObjectRequest
+                {
+                    BucketName = bucketName,
+                    Key = data.FileKey
+                };
+
+                using (var apiResponse = await s3Client.GetObjectAsync(request))
+                using (var reader = new StreamReader(apiResponse.ResponseStream))
+                {
+                    string content = await reader.ReadToEndAsync();
+                    response.SetFileContents(content);
+                    return response.Respond();
+                }
+            }
+            catch (AmazonS3Exception e)
+            {
+                return Response.Error($"Error getting object {data.FileKey} from bucket {bucketName}: {e.Message}");
+            }
+        }
+
+
+
+
+        public async Task<JsonElement> ReadJson(Request.ReadJson data)
+        {
+            Response.ReadJson response = new Response.ReadJson($"Succsesfully read json contents of {data.FileKey}");
+
+            JsonElement readFileResponce = await this.ReadFile(new Request.ReadFile(data.FileKey));
+            var defultData_WriteTxtFile = JsonSerializer.Deserialize<DefultResponse>(readFileResponce);
+            if (defultData_WriteTxtFile.Successful = false)
+            {
+                return readFileResponce;
+            }
+            var data_WriteTxtFile = JsonSerializer.Deserialize<Response.ReadFile>(readFileResponce);
+
+            using JsonDocument doc = JsonDocument.Parse(data_WriteTxtFile.FileContent);
+            JsonElement root = doc.RootElement;
+            response.SetJsonContents(root);
+            return response.Respond();
+        }
+        
+
 
         public async Task<JsonElement> CreateFolder(Request.CreateFolder data)
         {
-            if (!Request.Test(data.FolderKey)) {
+            if (!Request.Test(data.FolderKey))
+            {
                 return Response.Error("Invalid Arguments");
             }
             Response.CreateFolder response = new Response.CreateFolder($"Folder s3://{bucketName}/{data.FolderKey} created");

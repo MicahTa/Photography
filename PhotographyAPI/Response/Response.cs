@@ -32,4 +32,42 @@ public class Response
         public Delete(string message) : base(message) { }
         public Delete() : base() { }
     }
+
+    public class ReadFile : DefultResponse
+    {
+        public ReadFile(string message) : base(message) { }
+        public ReadFile() : base() { }
+        public JsonElement Respond()
+        {
+            var response = this;
+            string jsonString = JsonSerializer.Serialize(response);
+            using var doc = JsonDocument.Parse(jsonString);
+            return doc.RootElement.Clone();
+        }
+        [JsonPropertyName("fileContents")]
+        public string FileContent { get; set; }
+        public void SetFileContents(string contents)
+        {
+            FileContent = contents;
+        }
+    }
+
+    public class ReadJson : DefultResponse
+        {
+            public ReadJson(string message) : base(message) { }
+            public ReadJson() : base() { }
+            public JsonElement Respond()
+            {
+                var response = this;
+                string jsonString = JsonSerializer.Serialize(response);
+                using var doc = JsonDocument.Parse(jsonString);
+                return doc.RootElement.Clone();
+            }
+            [JsonPropertyName("fileContents")]
+            public JsonElement FileContent { get; set; }
+            public void SetJsonContents(JsonElement contents)
+            {
+                FileContent = contents;
+            }
+        }
 }

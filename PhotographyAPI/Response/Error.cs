@@ -2,7 +2,7 @@ using System.Text.Json;
 using System.Text.Json.Serialization;
 namespace PhotographyAPI;
 
-public class Error : IResponse
+public class Error
 {
     [JsonPropertyName("successful")]
     public bool Successful { get; set; } = false;
