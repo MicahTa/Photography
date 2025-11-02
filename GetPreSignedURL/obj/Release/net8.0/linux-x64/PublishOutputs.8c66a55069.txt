@@ -1,0 +1,9 @@
+C:\Users\micah\OneDrive\Coding\Website\Photograpgy\Photography\GetPreSignedURL\bin\Release\net8.0\publish\GetPreSignedURL.deps.json
+C:\Users\micah\OneDrive\Coding\Website\Photograpgy\Photography\GetPreSignedURL\bin\Release\net8.0\publish\GetPreSignedURL.runtimeconfig.json
+C:\Users\micah\OneDrive\Coding\Website\Photograpgy\Photography\GetPreSignedURL\bin\Release\net8.0\publish\GetPreSignedURL.pdb
+C:\Users\micah\OneDrive\Coding\Website\Photograpgy\Photography\GetPreSignedURL\bin\Release\net8.0\publish\Amazon.Lambda.APIGatewayEvents.dll
+C:\Users\micah\OneDrive\Coding\Website\Photograpgy\Photography\GetPreSignedURL\bin\Release\net8.0\publish\Amazon.Lambda.Core.dll
+C:\Users\micah\OneDrive\Coding\Website\Photograpgy\Photography\GetPreSignedURL\bin\Release\net8.0\publish\Amazon.Lambda.Serialization.SystemTextJson.dll
+C:\Users\micah\OneDrive\Coding\Website\Photograpgy\Photography\GetPreSignedURL\bin\Release\net8.0\publish\AWSSDK.Core.dll
+C:\Users\micah\OneDrive\Coding\Website\Photograpgy\Photography\GetPreSignedURL\bin\Release\net8.0\publish\AWSSDK.S3.dll
+C:\Users\micah\OneDrive\Coding\Website\Photograpgy\Photography\GetPreSignedURL\bin\Release\net8.0\publish\GetPreSignedURL.dll

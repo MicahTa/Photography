@@ -1,8 +1,11 @@
 C:\Users\micah\OneDrive\Coding\Website\Photograpgy\Photography\PhotographyAPI\bin\Release\net8.0\publish\PhotographyAPI.deps.json
 C:\Users\micah\OneDrive\Coding\Website\Photograpgy\Photography\PhotographyAPI\bin\Release\net8.0\publish\PhotographyAPI.runtimeconfig.json
 C:\Users\micah\OneDrive\Coding\Website\Photograpgy\Photography\PhotographyAPI\bin\Release\net8.0\publish\PhotographyAPI.pdb
+C:\Users\micah\OneDrive\Coding\Website\Photograpgy\Photography\PhotographyAPI\bin\Release\net8.0\publish\Amazon.Lambda.APIGatewayEvents.dll
 C:\Users\micah\OneDrive\Coding\Website\Photograpgy\Photography\PhotographyAPI\bin\Release\net8.0\publish\Amazon.Lambda.Core.dll
 C:\Users\micah\OneDrive\Coding\Website\Photograpgy\Photography\PhotographyAPI\bin\Release\net8.0\publish\Amazon.Lambda.Serialization.SystemTextJson.dll
 C:\Users\micah\OneDrive\Coding\Website\Photograpgy\Photography\PhotographyAPI\bin\Release\net8.0\publish\AWSSDK.Core.dll
 C:\Users\micah\OneDrive\Coding\Website\Photograpgy\Photography\PhotographyAPI\bin\Release\net8.0\publish\AWSSDK.S3.dll
+C:\Users\micah\OneDrive\Coding\Website\Photograpgy\Photography\PhotographyAPI\bin\Release\net8.0\publish\ExifLibrary.dll
+C:\Users\micah\OneDrive\Coding\Website\Photograpgy\Photography\PhotographyAPI\bin\Release\net8.0\publish\SixLabors.ImageSharp.dll
 C:\Users\micah\OneDrive\Coding\Website\Photograpgy\Photography\PhotographyAPI\bin\Release\net8.0\publish\PhotographyAPI.dll

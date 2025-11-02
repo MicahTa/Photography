@@ -1,0 +1,1 @@
+dotnet new lambda.EmptyFunction --name PhotographyAPI

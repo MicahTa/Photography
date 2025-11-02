@@ -53,15 +53,27 @@
           "dependencies": {
             "AWSSDK.S3": {
               "target": "Package",
-              "version": "[4.0.6.4, )"
+              "version": "[4.0.7.7, )"
+            },
+            "Amazon.Lambda.APIGatewayEvents": {
+              "target": "Package",
+              "version": "[2.7.1, )"
             },
             "Amazon.Lambda.Core": {
               "target": "Package",
-              "version": "[2.7.0, )"
+              "version": "[2.7.1, )"
             },
             "Amazon.Lambda.Serialization.SystemTextJson": {
               "target": "Package",
               "version": "[2.4.4, )"
+            },
+            "ExifLibrary": {
+              "target": "Package",
+              "version": "[1.0.13, )"
+            },
+            "SixLabors.ImageSharp": {
+              "target": "Package",
+              "version": "[3.1.11, )"
             }
           },
           "imports": [

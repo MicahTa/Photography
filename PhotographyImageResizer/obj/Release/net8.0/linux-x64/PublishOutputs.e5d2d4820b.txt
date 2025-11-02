@@ -1,0 +1,10 @@
+C:\Users\micah\OneDrive\Coding\Website\Photograpgy\Photography\PhotographyImageResizer\bin\Release\net8.0\publish\PhotographyImageResizer.deps.json
+C:\Users\micah\OneDrive\Coding\Website\Photograpgy\Photography\PhotographyImageResizer\bin\Release\net8.0\publish\PhotographyImageResizer.runtimeconfig.json
+C:\Users\micah\OneDrive\Coding\Website\Photograpgy\Photography\PhotographyImageResizer\bin\Release\net8.0\publish\PhotographyImageResizer.pdb
+C:\Users\micah\OneDrive\Coding\Website\Photograpgy\Photography\PhotographyImageResizer\bin\Release\net8.0\publish\Amazon.Lambda.Core.dll
+C:\Users\micah\OneDrive\Coding\Website\Photograpgy\Photography\PhotographyImageResizer\bin\Release\net8.0\publish\Amazon.Lambda.S3Events.dll
+C:\Users\micah\OneDrive\Coding\Website\Photograpgy\Photography\PhotographyImageResizer\bin\Release\net8.0\publish\Amazon.Lambda.Serialization.SystemTextJson.dll
+C:\Users\micah\OneDrive\Coding\Website\Photograpgy\Photography\PhotographyImageResizer\bin\Release\net8.0\publish\AWSSDK.Core.dll
+C:\Users\micah\OneDrive\Coding\Website\Photograpgy\Photography\PhotographyImageResizer\bin\Release\net8.0\publish\AWSSDK.S3.dll
+C:\Users\micah\OneDrive\Coding\Website\Photograpgy\Photography\PhotographyImageResizer\bin\Release\net8.0\publish\SixLabors.ImageSharp.dll
+C:\Users\micah\OneDrive\Coding\Website\Photograpgy\Photography\PhotographyImageResizer\bin\Release\net8.0\publish\PhotographyImageResizer.dll
