@@ -91,12 +91,6 @@ public class Response
         public WriteTxtFile() : base() { }
     }
 
-    public class WriteB64File : Base
-    {
-        public WriteB64File(string message) : base(message) { }
-        public WriteB64File() : base() { }
-    }
-
     public class GetPreSignedURL : Base
     {
         public GetPreSignedURL(string message) : base(message) { }
@@ -136,12 +130,6 @@ public class Response
         }
     }
 
-    public class CreateFolder : Base
-    {
-        public CreateFolder(string message) : base(message) { }
-        public CreateFolder() : base() { }
-    }
-
     public class CreateFolderRelitivePath : Base
     {
         public CreateFolderRelitivePath(string message) : base(message) { }
@@ -160,24 +148,7 @@ public class Response
         public DeleteRelitivePath() : base() { }
     }
 
-    public class ReadFile : Base
-    {
-        public ReadFile(string message) : base(message) { }
-        public ReadFile() : base() { }
-        public new JsonElement Respond()
-        {
-            var response = this;
-            string jsonString = JsonSerializer.Serialize(response);
-            using var doc = JsonDocument.Parse(jsonString);
-            return doc.RootElement.Clone();
-        }
-        [JsonPropertyName("fileContents")]
-        public string FileContent { get; set; }
-        public void SetFileContents(string contents)
-        {
-            FileContent = contents;
-        }
-    }
+
 
     public class GetKeys : Base
     {
@@ -202,10 +173,10 @@ public class Response
     }
 
 
-    public class ReadJson : Base
+    public class ReadPage : Base
     {
-        public ReadJson(string message) : base(message) { }
-        public ReadJson() : base() { }
+        public ReadPage(string message) : base(message) { }
+        public ReadPage() : base() { }
         public new JsonElement Respond()
         {
             var response = this;
@@ -221,27 +192,165 @@ public class Response
         }
     }
 
-    public class Rename : Base
-    {
-        public Rename(string message) : base(message) { }
-        public Rename() : base() { }
-    }
-
     public class RenameRelitivePath : Base
     {
         public RenameRelitivePath(string message) : base(message) { }
         public RenameRelitivePath() : base() { }
     }
 
-    public class ChangeCopyright : Base
-    {
-        public ChangeCopyright(string message) : base(message) { }
-        public ChangeCopyright() : base() { }
-    }
 
     public class ChangeCopyrightRelitivePath : Base
     {
         public ChangeCopyrightRelitivePath(string message) : base(message) { }
         public ChangeCopyrightRelitivePath() : base() { }
+    }
+
+    public class DoesUserExist : Base
+    {
+        public DoesUserExist(string message) : base(message) { }
+        public DoesUserExist() : base() { }
+        public void SetUserExistance(bool Existance)
+        {
+            Message = Existance.ToString();
+        }
+        public new JsonElement Respond()
+        {
+            var response = this;
+            string jsonString = JsonSerializer.Serialize(response);
+            using var doc = JsonDocument.Parse(jsonString);
+            return doc.RootElement.Clone();
+        }
+    }
+
+    public class GenerateToken : Base
+    {
+        public GenerateToken(string message) : base(message) { }
+        public GenerateToken() : base() { }
+        [JsonPropertyName("token")]
+        public string Token { get; set; }
+        public void SetToken(string token)
+        {
+            Token = token;
+        }
+        public new JsonElement Respond()
+        {
+            var response = this;
+            string jsonString = JsonSerializer.Serialize(response);
+            using var doc = JsonDocument.Parse(jsonString);
+            return doc.RootElement.Clone();
+        }
+    }
+
+    public class CreateUser : Base
+    {
+        public CreateUser(string message) : base(message) { }
+        public CreateUser() : base() { }
+        public new JsonElement Respond()
+        {
+            var response = this;
+            string jsonString = JsonSerializer.Serialize(response);
+            using var doc = JsonDocument.Parse(jsonString);
+            return doc.RootElement.Clone();
+        }
+    }
+
+    public class AddAuthUser : Base
+    {
+        public AddAuthUser(string message) : base(message) { }
+        public AddAuthUser() : base() { }
+        public void SetAuthUpdation(bool Existance)
+        {
+            Message = Existance.ToString();
+        }
+        public new JsonElement Respond()
+        {
+            var response = this;
+            string jsonString = JsonSerializer.Serialize(response);
+            using var doc = JsonDocument.Parse(jsonString);
+            return doc.RootElement.Clone();
+        }
+    }
+
+    public class RemoveAuthUser : Base
+    {
+        public RemoveAuthUser(string message) : base(message) { }
+        public RemoveAuthUser() : base() { }
+        public void SetAuthUpdation(bool Existance)
+        {
+            Message = Existance.ToString();
+        }
+        public new JsonElement Respond()
+        {
+            var response = this;
+            string jsonString = JsonSerializer.Serialize(response);
+            using var doc = JsonDocument.Parse(jsonString);
+            return doc.RootElement.Clone();
+        }
+    }
+
+    public class ListAuthUsers : Base
+    {
+        public ListAuthUsers(string message) : base(message) { }
+        public ListAuthUsers() : base() { }
+        [JsonPropertyName("users")]
+        public string[] Users { get; set; }
+        public void SetUsers(string[] users)
+        {
+            Users = users;
+        }
+        public new JsonElement Respond()
+        {
+            var response = this;
+            string jsonString = JsonSerializer.Serialize(response);
+            using var doc = JsonDocument.Parse(jsonString);
+            return doc.RootElement.Clone();
+        }
+    }
+    public class ChangePageAuth : Base
+    {
+        public ChangePageAuth(string message) : base(message) { }
+        public ChangePageAuth() : base() { }
+    }
+
+    public class ListPages : Base
+    {
+        public ListPages(string message) : base(message) { }
+        public ListPages() : base() { }
+        public new JsonElement Respond()
+        {
+            var response = this;
+            string jsonString = JsonSerializer.Serialize(response);
+            using var doc = JsonDocument.Parse(jsonString);
+            return doc.RootElement.Clone();
+        }
+        [JsonPropertyName("projects")]
+        public string[] Projects { get; set; }
+        public void SetProjectContents(string[] projects)
+        {
+            Projects = projects;
+        }
+    }
+
+    public class NewPage : Base
+    {
+        public NewPage(string message) : base(message) { }
+        public NewPage() : base() { }
+    }
+
+    public class DeletePage : Base
+    {
+        public DeletePage(string message) : base(message) { }
+        public DeletePage() : base() { }
+    }
+
+    public class CopyPage : Base
+    {
+        public CopyPage(string message) : base(message) { }
+        public CopyPage() : base() { }
+    }
+    public class RenamePage : Base
+    {
+        public RenamePage(string message) : base(message) { }
+        public RenamePage() : base() { }
     }
 }

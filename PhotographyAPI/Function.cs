@@ -1,8 +1,5 @@
 using Amazon.Lambda.Core;
-using System;
 using System.Text.Json;
-using System.Text.Json.Serialization;
-using Amazon.Lambda.APIGatewayEvents;
 
 // Assembly attribute to enable the Lambda function's JSON input to be converted into a .NET class.
 [assembly: LambdaSerializer(typeof(Amazon.Lambda.Serialization.SystemTextJson.DefaultLambdaJsonSerializer))]
@@ -12,13 +9,9 @@ namespace PhotographyAPI;
 
 public class Function
 {
-    // Load Diffrent Important API Classes
-    S3Controller S3 = new S3Controller();
     // Handle API Call
     public async Task<JsonElement> FunctionHandler(JsonElement input, ILambdaContext context)
     {
-        //try
-        //{
             var request = JsonSerializer.Deserialize<Request.Base>(input);
             JsonElement message;
 
@@ -33,98 +26,135 @@ public class Function
                 switch (request.Action.ToLower())
                 {
                     case "writetxtfile": // Used -- Full Path
-                        var data_WriteTxtFile = JsonSerializer.Deserialize<Request.WriteTxtFile>(input);
+                    var data_WriteTxtFile = JsonSerializer.Deserialize<Request.WriteTxtFile>(input);
                         if (data_WriteTxtFile is null) { message = Response.Error("Invalid Arguments"); break; }
-                        message = await S3.WriteTxtFile(new Request.WriteTxtFile(data_WriteTxtFile.KeyName, data_WriteTxtFile.FileContent));
+                        message = await PageEdit.WriteTxtFile(data_WriteTxtFile);
                         break;
                     
                     case "getkeys": // Used -- Full Path
                         var data_GetKeys = JsonSerializer.Deserialize<Request.GetKeys>(input);
                         if (data_GetKeys is null) { message = Response.Error("Invalid Arguments"); break; }
-                        message = await S3.GetKeys(new Request.GetKeys(data_GetKeys.PrefixName));
-                        break;
-
-                    case "writeb64file": // // Unused -- Full Path
-                        var data_WriteB64File = JsonSerializer.Deserialize<Request.WriteB64File>(input);
-                        if (data_WriteB64File is null) { message = Response.Error("Invalid Arguments"); break; }
-                        message = await S3.WriteB64File(new Request.WriteB64File(data_WriteB64File.KeyName, data_WriteB64File.FileContent));
+                        if (data_GetKeys.PrefixName is null) { message = Response.Error("Invalid Arguments"); break; }
+                        message = await PageEdit.GetKeys(data_GetKeys);
                         break;
 
                     case "getpresignedurl": // Used -- Full Path
                         var data_GetPreSignedURL = JsonSerializer.Deserialize<Request.GetPreSignedURL>(input);
                         if (data_GetPreSignedURL is null) { message = Response.Error("Invalid Arguments"); break; }
-                        message = await S3.GetPreSignedURL(new Request.GetPreSignedURL(data_GetPreSignedURL.KeyName));
+                        message = await Pages.GetPreSignedURL(data_GetPreSignedURL);
                         break;
                     
                     case "putpresignedurl": // Used -- Full Path
                         var data_PutPreSignedURL = JsonSerializer.Deserialize<Request.PutPreSignedURL>(input);
                         if (data_PutPreSignedURL is null) { message = Response.Error("Invalid Arguments"); break; }
-                        message = await S3.PutPreSignedURL(new Request.PutPreSignedURL(data_PutPreSignedURL.KeyName));
-                        break;
-
-                    case "createfolder": // Unused -- Full Path -- TODO create relitive path version to be used
-                        var data_CreateFolder = JsonSerializer.Deserialize<Request.CreateFolder>(input);
-                        if (data_CreateFolder is null) { message = Response.Error("Invalid Arguments"); break; }
-                        message = await S3.CreateFolder(new Request.CreateFolder(data_CreateFolder.FolderKey));
+                        message = await PageEdit.PutPreSignedURL(data_PutPreSignedURL);
                         break;
                     
-                    case "createfolderrelitivepath": // Unused -- Full Path -- TODO create relitive path version to be used
+                    case "createfolderrelitivepath": // Used -- Relitive Path 
                         var data_CreateFolderRelitivePath = JsonSerializer.Deserialize<Request.CreateFolderRelitivePath>(input);
                         if (data_CreateFolderRelitivePath is null) { message = Response.Error("Invalid Arguments"); break; }
-                        message = await S3.CreateFolderRelitivePath(new Request.CreateFolderRelitivePath(data_CreateFolderRelitivePath.FolderKey, data_CreateFolderRelitivePath.User));
-                        break;
-
-                    case "delete": // Unused -- Full Path
-                        var data_Delete = JsonSerializer.Deserialize<Request.Delete>(input);
-                        if (data_Delete is null) { message = Response.Error("Invalid Arguments"); break; }
-                        message = await S3.Delete(new Request.Delete(data_Delete.KeyOrPrefix));
+                        message = await PageEdit.CreateFolderRelitivePath(data_CreateFolderRelitivePath);
                         break;
 
                     case "deleterelitivepath": // used -- Relitive Path
                         var data_DeleteRelitivePath = JsonSerializer.Deserialize<Request.DeleteRelitivePath>(input);
                         if (data_DeleteRelitivePath is null) { message = Response.Error("Invalid Arguments"); break; }
-                        message = await S3.DeleteRelitivePath(new Request.DeleteRelitivePath(data_DeleteRelitivePath.KeyOrPrefix, data_DeleteRelitivePath.User));
+                        message = await PageEdit.DeleteRelitivePath(data_DeleteRelitivePath);
                         break;
 
-                    case "readfile": // Unused -- Full Path
-                        var data_ReadFile = JsonSerializer.Deserialize<Request.ReadFile>(input);
-                        if (data_ReadFile is null) { message = Response.Error("Invalid Arguments"); break; }
-                        message = await S3.ReadFile(new Request.ReadFile(data_ReadFile.FileKey));
-                        break;
-
-                    case "readjson": // Used -- Full Path
-                        var data_ReadJson = JsonSerializer.Deserialize<Request.ReadJson>(input);
-                        if (data_ReadJson is null) { message = Response.Error("Invalid Arguments"); break; }
-                        message = await S3.ReadJson(new Request.ReadJson(data_ReadJson.FileKey));
-                        break;
-                    
-                    case "rename": // Unused -- Full Path -- TODO Rename folders?
-                        var data_Rename = JsonSerializer.Deserialize<Request.Rename>(input);
-                        if (data_Rename is null) { message = Response.Error("Invalid Arguments"); break; }
-                        message = await S3.Rename(new Request.Rename(data_Rename.ObjKey, data_Rename.NewObjKey));
+                    case "readpage": // Used -- Full Path
+                        var data_ReadPage = JsonSerializer.Deserialize<Request.ReadPage>(input);
+                        if (data_ReadPage is null) { message = Response.Error("Invalid Arguments"); break; }
+                        message = await Pages.ReadPage(data_ReadPage);
                         break;
                     
                     case "renamerelitivepath": // Used -- Relitive Path
                         var data_RenameRelitivePath = JsonSerializer.Deserialize<Request.RenameRelitivePath>(input);
                         if (data_RenameRelitivePath is null) { message = Response.Error("Invalid Arguments"); break; }
-                        message = await S3.RenameRelitivePath(new Request.RenameRelitivePath(data_RenameRelitivePath.ObjKey, data_RenameRelitivePath.NewObjKey, data_RenameRelitivePath.User));
-                        break;
-
-                    case "changecopyright": // Unused -- Full Path
-                        var data_ChangeCopyright = JsonSerializer.Deserialize<Request.ChangeCopyright>(input);
-                        if (data_ChangeCopyright is null) { message = Response.Error("Invalid Arguments"); break; }
-                        message = await S3.ChangeCopyright(new Request.ChangeCopyright(data_ChangeCopyright.ObjKey, data_ChangeCopyright.CopyrightValue));
+                        message = await PageEdit.RenameRelitivePath(data_RenameRelitivePath);
                         break;
                     
                     case "changecopyrightrelitivepath": // used -- Relitive Path
                         var data_ChangeCopyrightRelitivePath = JsonSerializer.Deserialize<Request.ChangeCopyrightRelitivePath>(input);
                         if (data_ChangeCopyrightRelitivePath is null) { message = Response.Error("Invalid Arguments"); break; }
-                        message = await S3.ChangeCopyrightRelitivePath(new Request.ChangeCopyrightRelitivePath(data_ChangeCopyrightRelitivePath.ObjKey, data_ChangeCopyrightRelitivePath.CopyrightValue, data_ChangeCopyrightRelitivePath.User));
+                        message = await PageEdit.ChangeCopyrightRelitivePath(data_ChangeCopyrightRelitivePath);
+                        break;
+                        
+                    case "createuser": // used
+                        var data_CreateUser = JsonSerializer.Deserialize<Request.CreateUser>(input);
+                        if (data_CreateUser is null) { message = Response.Error("Invalid Arguments"); break; }
+                        message = await Users.CreateUser(data_CreateUser);
+                        break;
+                    
+                    case "doesuserexist": // unused
+                        var data_DoesUserExist = JsonSerializer.Deserialize<Request.DoesUserExist>(input);
+                        if (data_DoesUserExist is null) { message = Response.Error("Invalid Arguments"); break; }
+                        message = await Users.DoesUserExist(data_DoesUserExist);
+                        break;
+                    
+                    case "addauthuser": // used
+                        var data_AddAuthUser = JsonSerializer.Deserialize<Request.AddAuthUser>(input);
+                        if (data_AddAuthUser is null) { message = Response.Error("Invalid Arguments"); break; }
+                        message = await Users.AddAuthUser(data_AddAuthUser);
+                        break;
+                    
+                    case "removeauthuser": // used
+                        var data_RemoveAuthUser = JsonSerializer.Deserialize<Request.RemoveAuthUser>(input);
+                        if (data_RemoveAuthUser is null) { message = Response.Error("Invalid Arguments"); break; }
+                        message = await Users.RemoveAuthUser(data_RemoveAuthUser);
+                        break;
+                        
+                    case "listauthusers": // used
+                        var data_ListAuthUsers = JsonSerializer.Deserialize<Request.ListAuthUsers>(input);
+                        if (data_ListAuthUsers is null) { message = Response.Error("Invalid Arguments"); break; }
+                        message = await Users.ListAuthUsers(data_ListAuthUsers);
+                        break;
+
+                    case "generatetoken": // used
+                        var data_GenerateToken = JsonSerializer.Deserialize<Request.GenerateToken>(input);
+                        if (data_GenerateToken is null) { message = Response.Error("Invalid Arguments"); break; }
+                        message = await Users.GenerateToken(data_GenerateToken);
+                        break;
+                        
+                    case "changepageauth": // used
+                        var data_ChangePageAuth = JsonSerializer.Deserialize<Request.ChangePageAuth>(input);
+                        if (data_ChangePageAuth is null) { message = Response.Error("Invalid Arguments"); break; }
+                        message = await Users.ChangePageAuth(data_ChangePageAuth);
+                        break;
+
+                    case "listprojects": // used
+                        var data_ListPages = JsonSerializer.Deserialize<Request.ListPages>(input);
+                        if (data_ListPages is null) { message = Response.Error("Invalid Arguments"); break; }
+                        message = await Pages.ListPages(data_ListPages);
+                        break;
+                    
+                    case "newpage": // used
+                        var data_NewPage = JsonSerializer.Deserialize<Request.NewPage>(input);
+                        if (data_NewPage is null) { message = Response.Error("Invalid Arguments"); break; }
+                        message = await Pages.NewPage(data_NewPage);
+                        break;
+
+                    case "deletepage": // used
+                        var data_DeletePage = JsonSerializer.Deserialize<Request.DeletePage>(input);
+                        if (data_DeletePage is null) { message = Response.Error("Invalid Arguments"); break; }
+                        message = await Pages.DeletePage(data_DeletePage);
+                        break;
+                    
+                    case "copypage": // used
+                        var data_CopyPage = JsonSerializer.Deserialize<Request.CopyPage>(input);
+                        if (data_CopyPage is null) { message = Response.Error("Invalid Arguments"); break; }
+                        message = await Pages.CopyPage(data_CopyPage);
+                        break;
+                    
+                    case "renamepage": // used
+                        var data_RenamePage = JsonSerializer.Deserialize<Request.RenamePage>(input);
+                        if (data_RenamePage is null) { message = Response.Error("Invalid Arguments"); break; }
+                        message = await Pages.RenamePage(data_RenamePage);
                         break;
 
                     default:
-                        message = Response.Error($"Unknown action: {request.Action}");
-                        break;
+                            message = Response.Error($"Unknown action: {request.Action}");
+                            break;
                 }
                 if (request.CORS)
                 {
@@ -143,12 +173,5 @@ public class Function
             {
                 return message;
             }
-        /*}
-        catch (Exception ex)
-        {
-            JsonElement message;
-            message = Response.Error($"Error handling request: {ex.Message}");
-            return message;
-        }*/
     }
 }

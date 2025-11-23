@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("GetPreSignedURL")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Release")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+dd21f3cb0ea476bff0048a4be648c6d61a6caf82")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+dc15601a23114ef75276578162d5b9b15e22fbc2")]
 [assembly: System.Reflection.AssemblyProductAttribute("GetPreSignedURL")]
 [assembly: System.Reflection.AssemblyTitleAttribute("GetPreSignedURL")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

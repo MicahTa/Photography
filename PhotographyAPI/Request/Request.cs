@@ -26,80 +26,52 @@ public class Request
         public string Action { get; set; }
         [JsonPropertyName("CORS")]
         public bool CORS { get; set; } = false;
+        [JsonPropertyName("token")]
+        public string Token { get; set; }
+        [JsonPropertyName("tokenedUser")]
+        public string TokenedUser { get; set; }
     }
 
     public class WriteTxtFile : Base
     {
         [JsonPropertyName("keyName")]
         public string KeyName { get; set; }
+        [JsonPropertyName("user")]
+        public string User { get; set; }
         [JsonPropertyName("fileContent")]
         public string FileContent { get; set; }
-        public WriteTxtFile(string keyName, string fileContent)
-        {
-            Action = "WriteTxtFile";
-            KeyName = keyName;
-            FileContent = fileContent;
-        }
     }
 
     public class GetKeys : Base
     {
         [JsonPropertyName("prefixName")]
         public string PrefixName { get; set; }
-        public GetKeys(string prefixName)
-        {
-            Action = "GetKeys";
-            PrefixName = prefixName;
-        }
-    }
-
-    public class WriteB64File : Base
-    {
-        [JsonPropertyName("keyName")]
-        public string KeyName { get; set; }
-        [JsonPropertyName("fileContent")]
-        public string FileContent { get; set; }
-        public WriteB64File(string keyName, string fileContent)
-        {
-            Action = "writeb64file";
-            KeyName = keyName;
-            FileContent = fileContent;
-        }
+        [JsonPropertyName("user")]
+        public string User { get; set; }
     }
 
     public class GetPreSignedURL : Base
     {
         [JsonPropertyName("keyName")]
         public string KeyName { get; set; }
-        public GetPreSignedURL(string keyName)
-        {
-            Action = "getpresignedurl";
-            KeyName = keyName;
-        }
+        [JsonPropertyName("user")]
+        public string User { get; set; }
+
+        // Extra options for full rez downloading
+        [JsonPropertyName("fullRez")]
+        public bool? FullRez { get; set; }
+        [JsonPropertyName("page")]
+        public string? Page { get; set; }
     }
 
     public class PutPreSignedURL : Base
     {
         [JsonPropertyName("keyName")]
         public string KeyName { get; set; }
-        public PutPreSignedURL(string keyName)
-        {
-            Action = "putpresignedurl";
-            KeyName = keyName;
-        }
+        [JsonPropertyName("user")]
+        public string User { get; set; }
     }
 
-
-    public class Delete : Base
-    {
-        [JsonPropertyName("keyOrPrefix")]
-        public string KeyOrPrefix { get; set; }
-        public Delete(string keyOrPrefix)
-        {
-            Action = "Delete";
-            KeyOrPrefix = keyOrPrefix;
-        }
-    }
 
 
     public class DeleteRelitivePath : Base
@@ -108,28 +80,8 @@ public class Request
         public string KeyOrPrefix { get; set; }
         [JsonPropertyName("user")]
         public string User { get; set; }
-
-        public DeleteRelitivePath(string keyOrPrefix, string user)
-        {
-            Action = "RenameRelitivePath";
-            KeyOrPrefix = keyOrPrefix;
-            User = user;
-        }
     }
 
-
-    public class CreateFolder : Base
-    {
-        [JsonPropertyName("folderKey")]
-        public string FolderKey { get; set; }
-
-
-        public CreateFolder(string folderKey)
-        {
-            Action = "CreateFolder";
-            FolderKey = folderKey;
-        }
-    }
 
     public class CreateFolderRelitivePath : Base
     {
@@ -137,56 +89,13 @@ public class Request
         public string FolderKey { get; set; }
         [JsonPropertyName("user")]
         public string User { get; set; }
-
-
-        public CreateFolderRelitivePath(string folderKey, string user)
-        {
-            Action = "CreateFolderRelitivePath";
-            FolderKey = folderKey;
-            User = user;
-        }
     }
-
-
-
-    public class ReadFile : Base
+    public class ReadPage : Base
     {
-        [JsonPropertyName("fileKey")]
-        public string FileKey { get; set; }
-
-        public ReadFile(string fileKey)
-        {
-            Action = "ReadFile";
-            FileKey = fileKey;
-        }
-    }
-
-
-    public class ReadJson : Base
-    {
-        [JsonPropertyName("fileKey")]
-        public string FileKey { get; set; }
-
-        public ReadJson(string fileKey)
-        {
-            Action = "ReadFile";
-            FileKey = fileKey;
-        }
-    }
-
-    public class Rename : Base
-    {
-        [JsonPropertyName("objKey")]
-        public string ObjKey { get; set; }
-        [JsonPropertyName("newObjKey")]
-        public string NewObjKey { get; set; }
-
-        public Rename(string objKey, string newObjKey)
-        {
-            Action = "Rename";
-            ObjKey = objKey;
-            NewObjKey = newObjKey;
-        }
+        [JsonPropertyName("user")]
+        public string User { get; set; }
+        [JsonPropertyName("page")]
+        public string Page { get; set; }
     }
 
     public class RenameRelitivePath : Base
@@ -197,30 +106,8 @@ public class Request
         public string NewObjKey { get; set; }
         [JsonPropertyName("user")]
         public string User { get; set; }
-
-        public RenameRelitivePath(string objKey, string newObjKey, string user)
-        {
-            Action = "RenameRelitivePath";
-            ObjKey = objKey;
-            NewObjKey = newObjKey;
-            User = user;
-        }
     }
 
-    public class ChangeCopyright : Base
-    {
-        [JsonPropertyName("objKey")]
-        public string ObjKey { get; set; }
-        [JsonPropertyName("copyrightValue")]
-        public string CopyrightValue { get; set; }
-
-        public ChangeCopyright(string objKey, string copyrightValue)
-        {
-            Action = "ChangeCopyright";
-            ObjKey = objKey;
-            CopyrightValue = copyrightValue;
-        }
-    }
 
     public class ChangeCopyrightRelitivePath : Base
     {
@@ -230,13 +117,89 @@ public class Request
         public string CopyrightValue { get; set; }
         [JsonPropertyName("user")]
         public string User { get; set; }
+    }
 
-        public ChangeCopyrightRelitivePath(string objKey, string copyrightValue, string user)
+
+    public class CreateUser : Base
+    {
+        [JsonPropertyName("username")]
+        public string Username { get; set; }
+        [JsonPropertyName("email")]
+        public string Email { get; set; }
+        [JsonPropertyName("password")]
+        public string Password { get; set; }
+    }
+    public class AddAuthUser : Base
+    {
+        [JsonPropertyName("user")]
+        public string User { get; set; }
+        [JsonPropertyName("page")]
+        public string Page { get; set; }
+    }
+    public class RemoveAuthUser : Base
+    {
+        [JsonPropertyName("user")]
+        public string User { get; set; }
+        [JsonPropertyName("page")]
+        public string Page { get; set; }
+    }
+    public class ListAuthUsers : Base
+    {
+        [JsonPropertyName("page")]
+        public string Page { get; set; }
+    }
+    public class DoesUserExist : Base
+    {
+        [JsonPropertyName("user")]
+        public string User { get; set; }
+
+        public DoesUserExist(string user)
         {
-            Action = "ChangeCopyrightRelitivePath";
-            ObjKey = objKey;
-            CopyrightValue = copyrightValue;
+            Action = "DoesUserExist";
             User = user;
         }
+    }
+
+    public class GenerateToken : Base
+    {
+        [JsonPropertyName("user")]
+        public string User { get; set; }
+        [JsonPropertyName("password")]
+        public string Password { get; set; }
+    }
+    public class ChangePageAuth : Base
+    {
+        [JsonPropertyName("page")]
+        public string Page { get; set; }
+        [JsonPropertyName("open")]
+        public bool Open { get; set; }
+        [JsonPropertyName("download")]
+        public bool Download { get; set; }
+    }
+    public class ListPages : Base {}
+
+    public class NewPage : Base
+    {
+        [JsonPropertyName("pageName")]
+        public string PageName { get; set; }
+    }
+    public class DeletePage : Base
+    {
+        [JsonPropertyName("page")]
+        public string Page { get; set; }
+    }
+
+    public class CopyPage : Base
+    {
+        [JsonPropertyName("page")]
+        public string Page { get; set; }
+    }
+
+    public class RenamePage : Base
+    {
+        [JsonPropertyName("page")]
+        public string Page { get; set; }
+        [JsonPropertyName("newName")]
+        public string NewName { get; set; }
     }
 }
