@@ -20,7 +20,7 @@ public class Request
         return true;
     }
 
-    public class Base : IRequest
+    public class Base
     {
         [JsonPropertyName("action")]
         public string Action { get; set; }

@@ -18,7 +18,7 @@ namespace PhotographyAPI
 
 
 
-
+        // Get the sql password for aws seceret manager
         public static async Task<string> GetSQLPassword()
         {
             string secretName = "PhotographySQL";
@@ -58,6 +58,7 @@ namespace PhotographyAPI
             }
         }
 
+        // Generates user tokens
         public static string GenerateSecureToken(int byteLength = 32)
         {
             // 32 bytes = 256 bits of entropy (very strong)
@@ -74,6 +75,7 @@ namespace PhotographyAPI
             return token;
         }
 
+        // Create a user
         public static async Task<JsonElement> CreateUser(Request.CreateUser data)
         {
             // Verify data is correct
@@ -82,7 +84,7 @@ namespace PhotographyAPI
                 return Response.Error("Invalid Arguments");
             }
             Response.CreateUser response = new Response.CreateUser("User Created");
-            // Generate SQL Info
+            // Generate user creation query
             string ConnectionString = $"server=micah.is-a-techie.com;Database=Photography;User ID=root;Password={await GetSQLPassword()};";
             const string query = @"
             INSERT INTO `Photography`.`users` 
@@ -126,14 +128,11 @@ namespace PhotographyAPI
             } catch (Exception e) {
                 return Response.Error("User not Created");
             }
-
-            // INSERT INTO `Photography`.`users` (`userName`, `email`, `hashedPswd`) VALUES ('Username', 'email', 'pswdHash');
-            //string hashedPasswordAttempt = BCrypt.Net.BCrypt.HashPassword(data.Password, workFactor: 12);
         }
 
         public static async Task<bool> AuthToken(string user, string token)
         {
-            // Generate SQL Info
+            // Generate Query to add token
             string ConnectionString = $"server=micah.is-a-techie.com;Database=Photography;User ID=root;Password={await GetSQLPassword()};";
             const string query = @"
                 SELECT tokenExpiration
@@ -179,6 +178,7 @@ namespace PhotographyAPI
             return false;
         }
 
+        // Add authorized user
         public static async Task<JsonElement> AddAuthUser(Request.AddAuthUser data)
         {
             // Verify data is correct
@@ -191,8 +191,8 @@ namespace PhotographyAPI
                 return Response.Error($"Invalid Token/User");
             }
 
-            Response.AddAuthUser response = new Response.AddAuthUser();
-            // Generate SQL Info
+            Response.AddAuthUser response = new Response.AddAuthUser("Added new authorized user");
+            // Generate query to add user to list
             string ConnectionString = $"server=micah.is-a-techie.com;Database=Photography;User ID=root;Password={await GetSQLPassword()};";
             const string query = @"
             INSERT INTO `Photography`.`authUsers`
@@ -230,6 +230,7 @@ namespace PhotographyAPI
             }
         }
 
+        // Remove authorized user
         public static async Task<JsonElement> RemoveAuthUser(Request.RemoveAuthUser data)
         {
             // Verify data is correct
@@ -242,8 +243,8 @@ namespace PhotographyAPI
                 return Response.Error($"Invalid Token/User");
             }
 
-            Response.RemoveAuthUser response = new Response.RemoveAuthUser();
-            // Generate SQL Info
+            Response.RemoveAuthUser response = new Response.RemoveAuthUser("Removed authorized user");
+            // Generate query to remove username from list
             string ConnectionString = $"server=micah.is-a-techie.com;Database=Photography;User ID=root;Password={await GetSQLPassword()};";
             string query;
                 query = @"
@@ -284,7 +285,7 @@ namespace PhotographyAPI
             }
         }
         
-        
+        // Generate a list of authorized users        
         public static async Task<JsonElement> ListAuthUsers(Request.ListAuthUsers data)
         {
             // Verify data is correct
@@ -296,7 +297,7 @@ namespace PhotographyAPI
             {
                 return Response.Error($"Invalid Token/User");
             }
-            Response.ListAuthUsers response = new Response.ListAuthUsers();
+            Response.ListAuthUsers response = new Response.ListAuthUsers("Retreved list of authorized users");
 
             // Generate SQL Info
             string ConnectionString = $"server=micah.is-a-techie.com;Database=Photography;User ID=root;Password={await GetSQLPassword()};";
@@ -338,6 +339,7 @@ namespace PhotographyAPI
             }
 
         }
+        // Change page authorization settings
         public static async Task<JsonElement> ChangePageAuth(Request.ChangePageAuth data)
         {
             // Verify data is correct
@@ -350,7 +352,7 @@ namespace PhotographyAPI
                 return Response.Error($"Invalid Token/User");
             }
 
-            Response.ChangePageAuth response = new Response.ChangePageAuth();
+            Response.ChangePageAuth response = new Response.ChangePageAuth("Changed page authorization settings");
             // Generate SQL Info
             string ConnectionString = $"server=micah.is-a-techie.com;Database=Photography;User ID=root;Password={await GetSQLPassword()};";
             const string query = @"
@@ -387,6 +389,7 @@ namespace PhotographyAPI
                 return Response.Error("Unexpected Error");
             }
         }
+        // Test if user exists
         public static async Task<JsonElement> DoesUserExist(Request.DoesUserExist data)
         {
             // Verify data is correct
@@ -394,7 +397,7 @@ namespace PhotographyAPI
             {
                 return Response.Error("Invalid Arguments");
             }
-            Response.DoesUserExist response = new Response.DoesUserExist();
+            Response.DoesUserExist response = new Response.DoesUserExist("Tested user existance!");
 
             // Generate SQL Info
             string ConnectionString = $"server=micah.is-a-techie.com;Database=Photography;User ID=root;Password={await GetSQLPassword()};";
@@ -433,6 +436,7 @@ namespace PhotographyAPI
             }
         }
 
+        // Generate token for user
         public static async Task<JsonElement> GenerateToken(Request.GenerateToken data)
         {
             // Verify Data is correct

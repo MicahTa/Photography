@@ -64,6 +64,7 @@ namespace PhotographyAPI
         }
 
 
+        // Rename a page
         public static async Task<JsonElement> RenamePage(Request.RenamePage data)
         {
             // Test incoming data
@@ -77,6 +78,7 @@ namespace PhotographyAPI
             }
             Response.RenamePage response = new Response.RenamePage($"Page Renamed");
 
+            // Create sql query
             string ConnectionString = $"server=micah.is-a-techie.com;Database=Photography;User ID=root;Password={await Users.GetSQLPassword()};";
             const string query = @"
             UPDATE `Photography`.`pageRules`
@@ -105,6 +107,7 @@ namespace PhotographyAPI
             return response.Respond();
         }
 
+        // Delete page
         public static async Task<JsonElement> DeletePage(Request.DeletePage data)
         {
             // Test incoming data
@@ -119,20 +122,43 @@ namespace PhotographyAPI
 
             Response.DeletePage response = new Response.DeletePage($"Page Deleted");
 
-            
+            // Query for page rules
             string ConnectionString = $"server=micah.is-a-techie.com;Database=Photography;User ID=root;Password={await Users.GetSQLPassword()};";
             const string query = @"
             DELETE FROM `Photography`.`pageRules`
             WHERE (page = @page AND user = @user);
             ";
 
+            // run query for page rules
+            try
+            {
+                using var connection = new MySqlConnection(ConnectionString);
+                await connection.OpenAsync();
+
+                await using var command = new MySqlCommand(query, connection);
+                command.Parameters.Add("@user", MySqlDbType.VarChar).Value = data.TokenedUser;
+                command.Parameters.Add("@page", MySqlDbType.VarChar).Value = data.Page;
+                int rows = await command.ExecuteNonQueryAsync();
+            }
+            catch (Exception e)
+            {
+                return Response.Error("Unexpected Error");
+            }
+
+            // Query for authorized users
+            const string secondQuery = @"
+            DELETE FROM `Photography`.`authUsers`
+            WHERE (page = @page AND user = @user);
+            ";
+
+            // run query for authorized users
             try
             {
                 using var connection = new MySqlConnection(ConnectionString);
                 await connection.OpenAsync();
 
                 // Run query
-                await using var command = new MySqlCommand(query, connection);
+                await using var command = new MySqlCommand(secondQuery, connection);
                 command.Parameters.Add("@user", MySqlDbType.VarChar).Value = data.TokenedUser;
                 command.Parameters.Add("@page", MySqlDbType.VarChar).Value = data.Page;
                 int rows = await command.ExecuteNonQueryAsync();
@@ -148,6 +174,7 @@ namespace PhotographyAPI
             return response.Respond();
         }
 
+        // Create new page
         public static async Task<JsonElement> NewPage(Request.NewPage data)
         {
             // Test incoming data
@@ -162,6 +189,7 @@ namespace PhotographyAPI
 
             Response.NewPage response = new Response.NewPage($"New Page Created");
 
+            // Create new page in sql
             string ConnectionString = $"server=micah.is-a-techie.com;Database=Photography;User ID=root;Password={await Users.GetSQLPassword()};";
             const string query = @" INSERT INTO `Photography`.`pageRules` (`user`, `page`) VALUES (@user, @page); ";
 
@@ -181,6 +209,7 @@ namespace PhotographyAPI
                 return Response.Error("Unexpected Error");
             }
 
+            // Create the empty json and write file
             using var stream = new MemoryStream(Encoding.UTF8.GetBytes("{ \"pageAccess\": \"Private\", \"images\": []}"));
             var putRequest = new PutObjectRequest
             {
@@ -195,6 +224,7 @@ namespace PhotographyAPI
             return response.Respond();
         }
 
+        // Copy page
         public static async Task<JsonElement> CopyPage(Request.CopyPage data)
         {
             // Test incoming data
@@ -209,9 +239,11 @@ namespace PhotographyAPI
 
             Response.CopyPage response = new Response.CopyPage($"New Page Created");
 
+            // Create new page query
             string ConnectionString = $"server=micah.is-a-techie.com;Database=Photography;User ID=root;Password={await Users.GetSQLPassword()};";
             const string query = @" INSERT INTO `Photography`.`pageRules` (`user`, `page`) VALUES (@user, @page); ";
 
+            // run create new page query
             try
             {
                 using var connection = new MySqlConnection(ConnectionString);
@@ -228,6 +260,7 @@ namespace PhotographyAPI
                 return Response.Error("Unexpected Error");
             }
 
+            // Copy json file
             var copyRequest = new CopyObjectRequest
             {
                 SourceBucket = bucketName,
@@ -242,7 +275,7 @@ namespace PhotographyAPI
             return response.Respond();
         }
 
-                // Read s3 file
+        // Read s3 file
         private static async Task<String?> ReadFile(string FileKey)
         {
             try
@@ -274,6 +307,7 @@ namespace PhotographyAPI
             // Create sql connection and query
             string ConnectionString = $"server=micah.is-a-techie.com;Database=Photography;User ID=root;Password={await Users.GetSQLPassword()};";
 
+            // Test to see if the user or * (public) is in the allowed users and if allowed users can open the page
             const string query = @"
             SELECT a.id
             FROM authUsers a
@@ -417,6 +451,7 @@ namespace PhotographyAPI
             // Create sql connection and query
             string ConnectionString = $"server=micah.is-a-techie.com;Database=Photography;User ID=root;Password={await Users.GetSQLPassword()};";
 
+            // Test to see if user or * (public) are in allowed users and if they can download
             const string query = @"
             SELECT a.id
             FROM authUsers a

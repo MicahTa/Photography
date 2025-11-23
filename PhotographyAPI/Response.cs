@@ -76,11 +76,21 @@ public class Response
 
 
 
-
+    private class ErrorMsg
+    {
+        [JsonPropertyName("successful")]
+        public bool Successful { get; set; } = false;
+        [JsonPropertyName("errorMessage")]
+        public string ErrorMessage { get; set; }
+        public ErrorMsg(string errorMessage) {
+            Successful = false;
+            ErrorMessage = errorMessage;
+        }
+    }
 
     public static JsonElement Error(string errorMessage)
     {
-        var response = new Error(errorMessage);
+        var response = new ErrorMsg(errorMessage);
         string jsonString = JsonSerializer.Serialize(response);
         using var doc = JsonDocument.Parse(jsonString);
         return doc.RootElement.Clone();

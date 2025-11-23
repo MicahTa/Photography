@@ -32,7 +32,7 @@ namespace PhotographyAPI
                 return Response.Error($"Invalid Token/User");
             }
 
-            Response.WriteTxtFile response = new Response.WriteTxtFile($"File {fullKey} uploaded");
+            Response.WriteTxtFile response = new Response.WriteTxtFile($"File {data.KeyName} uploaded");
 
             // Write text file to aws
             using var stream = new MemoryStream(Encoding.UTF8.GetBytes(data.FileContent));
@@ -111,47 +111,6 @@ namespace PhotographyAPI
 
             return response.Respond();
         }
-
-        /* public static async Task<JsonElement> WriteB64File(Request.WriteB64File data)
-        {
-            if (!Request.Test(data.KeyName, data.FileContent))
-            {
-                return Response.Error("Invalid Arguments");
-            }
-            string nameFromFilePath = data.KeyName.Split('/').Skip(1).FirstOrDefault() ?? "";
-            if (!(await Users.AuthToken(data.TokenedUser, data.Token) && nameFromFilePath == data.TokenedUser))
-            {
-                return Response.Error($"Invalid Token/User");
-            }
-
-            Response.WriteB64File response = new Response.WriteB64File(
-                $"File uploaded to s3://{bucketName}/{data.KeyName}"
-            );
-
-            try
-            {
-                // Decode Base64 string into raw bytes
-                byte[] fileBytes = Convert.FromBase64String(data.FileContent);
-
-                using var stream = new MemoryStream(fileBytes);
-
-                var putRequest = new PutObjectRequest
-                {
-                    BucketName = bucketName,
-                    Key = data.KeyName,
-                    InputStream = stream,
-                    ContentType = "application/octet-stream" // safer default for binary
-                };
-
-                await s3Client.PutObjectAsync(putRequest);
-            }
-            catch (FormatException)
-            {
-                return Response.Error("FileContent is not valid Base64");
-            }
-
-            return response.Respond();
-        } */
 
 
         // Get a url for uploading content
@@ -381,30 +340,28 @@ namespace PhotographyAPI
         // Change copyright on file
         private static async Task<bool> ChangeCopyright(string objKey, string copyrightValue)
         {
-            // #IWasLazyAndAiDidThisOneLol
-            // It was very late at night
             try
             {
-                // 1️⃣ Download the image from S3
+                // Download the image from S3
                 var s3Object = await s3Client.GetObjectAsync(bucketName, objKey);
                 using var inputStream = new MemoryStream();
                 await s3Object.ResponseStream.CopyToAsync(inputStream);
                 inputStream.Position = 0;
 
-                // 2️⃣ Load the image using ImageSharp
-                using var image = Image.Load(inputStream); // no out parameter
-                var format = image.Metadata.DecodedImageFormat; // get the format separately;
+                // Load the image using ImageSharp
+                using var image = Image.Load(inputStream);
+                var format = image.Metadata.DecodedImageFormat; // Get format
 
-                // 3️⃣ Add or update EXIF copyright
+                // Add or update copyright
                 image.Metadata.ExifProfile ??= new ExifProfile();
                 image.Metadata.ExifProfile.SetValue(ExifTag.Copyright, copyrightValue);
 
-                // 4️⃣ Save the modified image to a memory stream
+                // Save Image
                 using var outputStream = new MemoryStream();
                 image.Save(outputStream, format);
                 outputStream.Position = 0;
 
-                // 5️⃣ Upload the modified image back to S3
+                // Upload image
                 var putRequest = new PutObjectRequest
                 {
                     BucketName = bucketName,
